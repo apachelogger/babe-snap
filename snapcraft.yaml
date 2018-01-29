@@ -1,0 +1,57 @@
+---
+name: babe
+version: 1.2
+summary: Babe is a tiny music collection manager
+description: Babe will handle your whole music collection, letting you create
+    custom playlists to organize your music. You can also filter your music by
+    artist, title, album, genre, date and location. Babe let's you babe-mark
+    your favorite YouTube music videos into your local collection by using the
+    Chromium extension. Think of Babe as the playlist where all your favorite
+    tracks at the moment are. And when needed you also have an integrated 
+    collection manager.
+    Use the Chrome extension to collect your favorite music videos from online
+    streaming services like YouTube or Vimeo. Babe uses youtube-dl, so all the
+    supported sites by it are also supported by Babe
+    Babe is built with a tight integration with the Plasma desktop, making use
+    of native notifications, mpris controls, kde connect to send your music to
+    your devices and also krunner action queries.
+confinement: strict
+grade: stable
+
+apps:
+    babe:
+        command: kf5-launch babe
+        plugs:
+        - kde-frameworks-5-plug
+        - home
+        - x11
+        - opengl
+        - network
+        - network-bind
+        - unity7
+        - pulseaudio
+
+slots:
+    session-dbus-interface:
+        interface: dbus
+        name: org.kde.babe
+        bus: session
+plugs:
+    kde-frameworks-5-plug:
+        content: kde-frameworks-5-all
+        interface: content
+        default-provider: kde-frameworks-5
+        target: kf5
+parts:
+    babe:
+        after: [kde-frameworks-5-dev, kde-frameworks-5-env]
+        plugin: cmake
+        source: git://anongit.kde.org/babe.git
+        configflags:
+        - "-DKDE_INSTALL_USE_QT_SYS_PATHS=ON"
+        - "-DCMAKE_INSTALL_PREFIX=/usr"
+        - "-DCMAKE_BUILD_TYPE=Release"
+        - "-DENABLE_TESTING=OFF"
+        - "-DBUILD_TESTING=OFF"
+        - "-DKDE_SKIP_TEST_SETTINGS=ON"
+
